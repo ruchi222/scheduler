@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import 'components/Appointment/styles.scss';
 import Header from "components/Appointment/Header";
 import Empty from "components/Appointment/Empty";
 import Show from "components/Appointment/Show";
+import Form from "components/Appointment/Form";
 import useVisualMode from "hooks/useVisualMode";
 
 
@@ -17,6 +18,18 @@ export default function Appointment(props) {
         props.interview ? SHOW : EMPTY
     );
 
+    useEffect(() => {
+    
+        if (props.interview && mode === EMPTY) {
+          transition(SHOW);
+        }
+        
+        if (!props.interview && mode === SHOW) {
+          transition(EMPTY);
+        }
+    
+      }, [mode, transition, props.interview])
+    
 
     return (
     <article className="appointment">
@@ -38,7 +51,7 @@ export default function Appointment(props) {
 
 {mode === CREATE &&
         <Form
-
+        interviewers={props.interviewers}
         />}
        
     </article>
