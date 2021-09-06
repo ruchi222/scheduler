@@ -15,14 +15,13 @@ export function getAppointmentsForDay(state, name) {
 }
 
 export function getInterviewersForDay(state, day) {
-  const result = [];
-  const dayData = state.days.filter(d => d.name === day)
-
-  if (!dayData[0]) return result;
-  for (const a of dayData[0].interviewers) {
-    result.push(state.interviewers[a]);
-  }
-  
+  console.log("......... day ", day);
+  console.log("......... state", state);
+  const selDay = state.days.filter(day1 => day1.name === day);
+  console.log("..... sel day", selDay)
+  const arr=[];
+  if(selDay.length ===0 ) return arr;
+  const result = selDay[0].interviewers.map(id1 => state.interviewers[id1]);
   return result;
 };
 
