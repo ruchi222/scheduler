@@ -6,6 +6,7 @@ import Show from "components/Appointment/Show";
 import Form from "components/Appointment/Form";
 import Confirm from "components/Appointment/Confirm";
 import Status from "components/Appointment/Status";
+import Error from "components/Appointment/Error";
 import useVisualMode from "hooks/useVisualMode";
 
 
@@ -15,7 +16,11 @@ export default function Appointment(props) {
     const SHOW = "SHOW";
     const CREATE = "CREATE";
     const CONFIRM = "CONFIRM";
+    const SAVING = "SAVING";
     const DELETING = "DELETING";
+    const EDIT = "EDIT";
+    const ERROR_SAVE = "ERROR_SAVE";
+    const ERROR_DELETE = "ERROR_DELETE";
 
     const { mode, transition, back } = useVisualMode (
         props.interview ? SHOW : EMPTY
@@ -23,43 +28,70 @@ export default function Appointment(props) {
 
 
 
+    useEffect(() => {
+    
+      if (props.interview && mode === EMPTY) {
+        transition(SHOW);
+      }
+      
+      if (!props.interview && mode === SHOW) {
+        transition(EMPTY);
+      }
+  
+    }, [mode, transition, props.interview])
+  
+  // console.log("props.interviewers", props.interviewers)
+
   function save(name, interviewer) {
-    console.log(name)
-    console.log(interviewer)
     const interview = {
       student: name,
       interviewer
     };
-    props.bookInterview(props.id, interview)
+    transition(SAVING)
+    Promise.resolve(props.bookInterview(props.id, interview))
     .then(() => { 
-      console.log("hitting this")
-      transition(SHOW) });
+      transition(SHOW) })
+      // .catch(err => {
+        transition(ERROR_SAVE, true)
+        // console.log(err)
+      // })
+//     props
+//  .bookInterview(props.id, interview)
+//  .then(() => transition(SHOW))
+//  .catch(error => transition(ERROR_SAVE));
   }
 
-
-  const deleteAppointment = () => {
-    transition(DELETING);
-    Promise.resolve(props.cancelInterview(props.id))
-      .then(() => transition(EMPTY))
-      .catch(err => {
-        transition(CONFIRM)
-        console.log(err)
-      });
+  function edit() {
+    transition(EDIT)
   };
 
-    // useEffect(() => {
+  console.log("Props from Index.js file", props)
+  const deleteAppointment = () => {
+
+    console.log("I am in the delete appointment function")
+    // transition(DELETING);
+    // Promise.resolve(props.cancelInterview(props.id))
+    //   .then(() => transition(EMPTY))
+    //   .catch(err => {
+    //     transition(ERROR_DELETE, true)
+    //     console.log(err)
+    //   });
+
+    // transition(DELETING, true);
+    // props
+    //  .cancelInterview(props.id)
+    //  .then(() => transition(EMPTY))
+    //  .catch(error => transition(ERROR_DELETE, true));
+
+   
+      transition(DELETING, true)
+      props.cancelInterview(props.id)
+      .then(() => transition(EMPTY))
+      .catch(() => transition(ERROR_DELETE, true))
     
-    //     if (props.interview && mode === EMPTY) {
-    //       transition(SHOW);
-    //     }
-        
-    //     if (!props.interview && mode === SHOW) {
-    //       transition(EMPTY);
-    //     }
-    
-    //   }, [mode, transition, props.interview])
-    
-    // console.log("props.interviewers", props.interviewers)
+   
+  };
+
       
       return (
         <article className="appointment" data-testid="appointment">
@@ -71,6 +103,7 @@ export default function Appointment(props) {
               student={props.interview.student}
               interviewer={props.interview.interviewer}
               onDelete={() => transition(CONFIRM)}
+              OnEdit={() => edit()}
 
             />
           )}
@@ -84,11 +117,13 @@ export default function Appointment(props) {
          
             />
           )}
+             {mode === SAVING && <Status message="Saving" />}
+         
             {mode === CONFIRM && (
         <Confirm 
           message="Are you sure you want to delete?"
-          onConfirm={deleteAppointment}
-          onCancel = {back}
+          onConfirm={ () => {deleteAppointment()}}
+          onCancel = { () => {back()}}
         />
       )}
       {mode === DELETING && (
@@ -97,6 +132,29 @@ export default function Appointment(props) {
         />
       )}
 
+      {mode === EDIT && (
+        <Form 
+        name={props.name}
+            value={props.value}
+            interviewers={props.interviewers}
+            onSave={save}
+            onCancel={back}
+        />
+      )}
+
+      {mode === ERROR_SAVE && (
+        <Error 
+          message="Could not create app"
+          onClose={back}
+        />
+      )}
+
+      {mode === ERROR_DELETE && (
+        <Error 
+          message="Could not cancel appointment"
+          onClose={back}
+        />
+      )}
        
     </article>
 )

@@ -27,9 +27,7 @@ console.log(props.interviewers)
         type="text"
         onChange={(event) => setName(event.target.value)}
         placeholder="Enter Student Name"
-        /*
-          This must be a controlled component
-        */
+ 
       />
     </form>
     <InterviewerList interviewers={props.interviewers ? props.interviewers : []} value={interviewer} onChange={setInterviewer} />
