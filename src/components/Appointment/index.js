@@ -12,6 +12,7 @@ export default function Appointment(props) {
     const EMPTY = "EMPTY";
     const SHOW = "SHOW";
     const CREATE = "CREATE";
+    
 
 
     const { mode, transition, back } = useVisualMode (
@@ -21,37 +22,39 @@ export default function Appointment(props) {
 
 
   function save(name, interviewer) {
-    console.log("name: ", name , " interviewer: " , interviewer );
+    console.log(name)
+    console.log(interviewer)
     const interview = {
       student: name,
       interviewer
     };
     props.bookInterview(props.id, interview)
     .then(() => { 
-      console.log("Transitioning the show");
+      console.log("hitting this")
       transition(SHOW) });
   }
 
-    useEffect(() => {
+    // useEffect(() => {
     
-        if (props.interview && mode === EMPTY) {
-          transition(SHOW);
-        }
+    //     if (props.interview && mode === EMPTY) {
+    //       transition(SHOW);
+    //     }
         
-        if (!props.interview && mode === SHOW) {
-          transition(EMPTY);
-        }
+    //     if (!props.interview && mode === SHOW) {
+    //       transition(EMPTY);
+    //     }
     
-      }, [mode, transition, props.interview])
+    //   }, [mode, transition, props.interview])
     
-    
+    // console.log("props.interviewers", props.interviewers)
+      
       return (
         <article className="appointment" data-testid="appointment">
           <Header time={props.time} />
           {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
           {mode === SHOW && (
             <Show
-              id={props.id}
+              // id={props.id}
               student={props.interview.student}
               interviewer={props.interview.interviewer}
 
@@ -59,9 +62,11 @@ export default function Appointment(props) {
           )}
           {mode === CREATE && (
             <Form 
-              interviewers={[]}
-              onCancel = {back}
-              onSave = {save}
+            name={props.name}
+            value={props.value}
+            interviewers={props.interviewers}
+            onSave={save}
+            onCancel={back}
          
             />
           )}
