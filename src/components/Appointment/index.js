@@ -51,10 +51,10 @@ export default function Appointment(props) {
     Promise.resolve(props.bookInterview(props.id, interview))
     .then(() => { 
       transition(SHOW) })
-      // .catch(err => {
+      .catch(err => {
         transition(ERROR_SAVE, true)
         // console.log(err)
-      // })
+      })
 //     props
 //  .bookInterview(props.id, interview)
 //  .then(() => transition(SHOW))
@@ -134,7 +134,7 @@ export default function Appointment(props) {
 
       {mode === EDIT && (
         <Form 
-        name={props.name}
+            name={props.name ? props.name : props.interview.student}
             value={props.value}
             interviewers={props.interviewers}
             onSave={save}

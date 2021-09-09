@@ -15,10 +15,8 @@ export function getAppointmentsForDay(state, name) {
 }
 
 export function getInterviewersForDay(state, day) {
-  console.log("......... day ", day);
-  console.log("......... state", state);
+
   const selDay = state.days.filter(day1 => day1.name === day);
-  console.log("..... sel day", selDay)
   const arr=[];
   if(selDay.length ===0 ) return arr;
   const result = selDay[0].interviewers.map(id1 => state.interviewers[id1]);
