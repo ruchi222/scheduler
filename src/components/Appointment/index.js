@@ -39,8 +39,7 @@ export default function Appointment(props) {
       }
   
     }, [mode, transition, props.interview])
-  
-  // console.log("props.interviewers", props.interviewers)
+
 
   function save(name, interviewer) {
     const interview = {
@@ -53,46 +52,21 @@ export default function Appointment(props) {
       transition(SHOW) })
       .catch(err => {
         transition(ERROR_SAVE, true)
-        // console.log(err)
       })
-//     props
-//  .bookInterview(props.id, interview)
-//  .then(() => transition(SHOW))
-//  .catch(error => transition(ERROR_SAVE));
   }
 
   function edit() {
     transition(EDIT)
   };
 
-  console.log("Props from Index.js file", props)
   const deleteAppointment = () => {
-
-    console.log("I am in the delete appointment function")
-    // transition(DELETING);
-    // Promise.resolve(props.cancelInterview(props.id))
-    //   .then(() => transition(EMPTY))
-    //   .catch(err => {
-    //     transition(ERROR_DELETE, true)
-    //     console.log(err)
-    //   });
-
-    // transition(DELETING, true);
-    // props
-    //  .cancelInterview(props.id)
-    //  .then(() => transition(EMPTY))
-    //  .catch(error => transition(ERROR_DELETE, true));
-
-   
       transition(DELETING, true)
       props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true))
     
-   
   };
 
-      
       return (
         <article className="appointment" data-testid="appointment">
           <Header time={props.time} />
