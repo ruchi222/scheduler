@@ -14,7 +14,6 @@ export default function useApplicationData(initial) {
       const setDay = day => setState({ ...state, day });
 
 
-
       function bookInterview(id, interview) {
 
         const appointment = {
@@ -29,12 +28,6 @@ export default function useApplicationData(initial) {
         const nullAppointments = selectedDay.appointments.filter(
             (appointment) => appointments[appointment].interview === null).length;
         const updatedDays = state.days.map((day) => day.name === state.day ? { ...day, spots: nullAppointments} : day);
-            console.log(nullAppointments)
-        // setState({
-        //     ...state,
-        //     appointments,
-        //     days: updatedDays,
-        //   });
 
 
         return axios.put(`/api/appointments/${id}`, {interview} )
@@ -68,23 +61,10 @@ export default function useApplicationData(initial) {
             (appointment) => appointments[appointment].interview === null).length;
         const updatedDays = state.days.map((day) => day.name === state.day ? { ...day, spots: nullAppointments} : day);
 
-    //   setState({
-    //     ...state,
-    //     appointments,
-    //     days: updatedDays,
-    //   });
-
         return axios
           .delete(`/api/appointments/${id}`)
           .then(res => {
-            
-            //   Promise.all([           
-            //       axios.get("/api/days"),         
-            //     ]).then((all) => {            
-            //         setState(prev => ({            
-            //              ...prev,             
-            //              days: all[0].data          
-            //              }));          });
+
             setState({
               ...state,
               appointments,
@@ -92,12 +72,8 @@ export default function useApplicationData(initial) {
 
             });
           })
-        //   .catch((err) => {
-        //     console.log("Error",err)
-        //   })
           
       };
-    
     
       useEffect(() => { 
           Promise.all([
