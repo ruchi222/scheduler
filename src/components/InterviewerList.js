@@ -3,7 +3,6 @@ import "components/InterviewerList.scss";
 import InterviewerListItem from "components/InterviewerListItem";
 import PropTypes from 'prop-types';
 
-// Our InterviewerList takes in three props:
 
 // interviewers:array - an array of objects containing the information of each interviewer
 // interviewer:number - the id of an interviewer
