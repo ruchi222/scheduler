@@ -39,9 +39,6 @@ export default function useApplicationData(initial) {
            
             });
           })
-          .catch((err) => {
-            console.log(err)
-          })
       }
     
       const cancelInterview = (id) => {
